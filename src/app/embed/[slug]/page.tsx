@@ -2,6 +2,22 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import EmbedClient from "./embed-client";
 import type { Roadmap, Column, Card } from "@/lib/types/database";
+import type { Metadata } from "next";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://roadwave.xyz";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const oembedUrl = `${APP_URL}/api/oembed?url=${encodeURIComponent(`${APP_URL}/embed/${params.slug}`)}`;
+  return {
+    other: {
+      "link-oembed": oembedUrl,
+    },
+  };
+}
 
 export default async function EmbedPage({
   params,
