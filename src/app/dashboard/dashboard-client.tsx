@@ -96,7 +96,7 @@ export default function DashboardClient({
       <nav className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex flex-col items-center">
-            <Image src="/logo.svg" alt="" width={32} height={14} />
+            <Image src="/logo.svg" alt="" width={100} height={20} />
             <span className="text-xl font-bold tracking-tight text-gray-900">RoadWave</span>
           </Link>
           <div className="flex items-center gap-4">
