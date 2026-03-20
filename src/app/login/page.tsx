@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   const supabase = createClient();
@@ -56,11 +57,8 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-sm">
-        <Link
-          href="/"
-          className="mb-8 block text-center text-2xl font-bold text-gray-900"
-        >
-          RoadWave
+        <Link href="/" className="mb-8 flex justify-center">
+          <Image src="/logo.svg" alt="RoadWave" width={180} height={45} priority />
         </Link>
 
         <div className="rounded-xl bg-white p-8 shadow-sm">

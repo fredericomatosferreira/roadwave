@@ -61,9 +61,9 @@ export default async function PublicRoadmapPage({
         />
       </div>
 
-      <footer className="py-8 text-center text-sm text-gray-400">
-        Powered by{" "}
-        <a href="/" className="text-blue-500 hover:text-blue-600">
+      <footer className="flex items-center justify-center gap-1.5 py-8 text-sm text-gray-400">
+        Powered by
+        <a href="/" className="text-blue-500 hover:text-blue-600 font-medium">
           RoadWave
         </a>
       </footer>

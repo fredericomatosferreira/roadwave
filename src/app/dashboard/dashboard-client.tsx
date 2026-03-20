@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Roadmap } from "@/lib/types/database";
 import { templates, type RoadmapTemplate } from "@/lib/templates";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -94,11 +95,8 @@ export default function DashboardClient({
     <div className="min-h-screen bg-gray-50">
       <nav className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link
-            href="/"
-            className="text-xl font-bold tracking-tight text-gray-900"
-          >
-            RoadWave
+          <Link href="/">
+            <Image src="/logo.svg" alt="RoadWave" width={140} height={35} />
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">{userEmail}</span>

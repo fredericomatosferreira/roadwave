@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "RoadWave — Live Embeddable Roadmaps",
   description:
     "Create Kanban-style roadmaps that auto-update inside iframes embedded in GitBook, Notion, or any documentation site.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LandingPage() {
   return (
@@ -6,9 +7,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="border-b border-gray-100">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="text-xl font-bold tracking-tight text-gray-900">
-            RoadWave
-          </span>
+          <Image src="/logo.svg" alt="RoadWave" width={160} height={40} priority />
           <div className="flex items-center gap-4">
             <Link
               href="/login"
