@@ -7,7 +7,10 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="border-b border-gray-100">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Image src="/logo.svg" alt="RoadWave" width={160} height={40} priority />
+          <span className="flex items-center gap-2">
+            <Image src="/logo.svg" alt="" width={36} height={36} priority />
+            <span className="text-xl font-bold tracking-tight text-gray-900">RoadWave</span>
+          </span>
           <div className="flex items-center gap-4">
             <Link
               href="/login"

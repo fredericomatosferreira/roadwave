@@ -95,8 +95,9 @@ export default function DashboardClient({
     <div className="min-h-screen bg-gray-50">
       <nav className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/">
-            <Image src="/logo.svg" alt="RoadWave" width={140} height={35} />
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/logo.svg" alt="" width={32} height={32} />
+            <span className="text-xl font-bold tracking-tight text-gray-900">RoadWave</span>
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">{userEmail}</span>

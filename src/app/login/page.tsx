@@ -57,8 +57,9 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-sm">
-        <Link href="/" className="mb-8 flex justify-center">
-          <Image src="/logo.svg" alt="RoadWave" width={180} height={45} priority />
+        <Link href="/" className="mb-8 flex flex-col items-center gap-2">
+          <Image src="/logo.svg" alt="" width={48} height={48} priority />
+          <span className="text-2xl font-bold tracking-tight text-gray-900">RoadWave</span>
         </Link>
 
         <div className="rounded-xl bg-white p-8 shadow-sm">
