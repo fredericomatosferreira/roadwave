@@ -29,6 +29,7 @@ export default function KanbanBoard({
   onRenameColumn,
   onDeleteColumn,
   readonly = false,
+  embed = false,
 }: {
   columns: Column[];
   cards: Card[];
@@ -38,6 +39,7 @@ export default function KanbanBoard({
   onRenameColumn?: (columnId: string, title: string) => void;
   onDeleteColumn?: (columnId: string) => void;
   readonly?: boolean;
+  embed?: boolean;
 }) {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const sensors = useSensors(
@@ -105,7 +107,7 @@ export default function KanbanBoard({
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex gap-4 overflow-x-auto p-4 pb-8">
+      <div className={embed ? "grid gap-3 p-2" : "flex gap-4 overflow-x-auto p-4 pb-8"} style={embed ? { gridTemplateColumns: `repeat(${sortedColumns.length}, minmax(0, 1fr))` } : undefined}>
         <SortableContext
           items={sortedColumns.map((c) => c.id)}
           strategy={horizontalListSortingStrategy}
@@ -128,6 +130,7 @@ export default function KanbanBoard({
                   : undefined
               }
               readonly={readonly}
+              embed={embed}
             />
           ))}
         </SortableContext>

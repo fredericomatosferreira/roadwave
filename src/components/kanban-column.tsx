@@ -16,6 +16,7 @@ export default function KanbanColumn({
   onRenameColumn,
   onDeleteColumn,
   readonly = false,
+  embed = false,
 }: {
   column: Column;
   cards: Card[];
@@ -24,11 +25,12 @@ export default function KanbanColumn({
   onRenameColumn?: (title: string) => void;
   onDeleteColumn?: () => void;
   readonly?: boolean;
+  embed?: boolean;
 }) {
   const { setNodeRef } = useDroppable({ id: column.id });
 
   return (
-    <div className="flex w-72 shrink-0 flex-col rounded-xl bg-gray-100/80 p-3">
+    <div className={`flex flex-col rounded-xl bg-gray-100/80 p-3 ${embed ? "min-w-0" : "w-72 shrink-0"}`}>
       {/* Column header */}
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">

@@ -89,8 +89,8 @@ export default function EmbedClient({
   }, [roadmapId]);
 
   return (
-    <div className="h-screen overflow-auto bg-white">
-      <KanbanBoard columns={columns} cards={cards} readonly />
+    <div className="overflow-auto bg-white p-2">
+      <KanbanBoard columns={columns} cards={cards} readonly embed />
     </div>
   );
 }
