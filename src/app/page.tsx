@@ -231,10 +231,4 @@ const features = [
     description:
       "Tag cards as Planned, In Progress, or Done with color-coded badges so stakeholders can see progress at a glance.",
   },
-  {
-    title: "Deploy anywhere",
-    icon: "\u25B2",
-    description:
-      "Built on Next.js and Supabase. Deploy to Vercel in one click and scale as your team grows.",
-  },
 ];
