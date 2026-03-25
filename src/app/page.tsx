@@ -94,26 +94,21 @@ export default function LandingPage() {
             tool that supports iframes.
           </p>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {embedGuides.map((guide) => (
               <div
                 key={guide.tool}
                 className="rounded-xl border border-gray-200 bg-white p-6"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{guide.icon}</span>
+                  {guide.logo ? (
+                    <Image src={guide.logo} alt={guide.tool} width={28} height={28} />
+                  ) : (
+                    <span className="text-2xl">{guide.icon}</span>
+                  )}
                   <h3 className="text-lg font-semibold text-gray-900">
                     {guide.tool}
                   </h3>
-                  <span
-                    className={`ml-auto rounded-full px-2 py-0.5 text-xs font-medium ${
-                      guide.status === "supported"
-                        ? "bg-green-50 text-green-700"
-                        : "bg-gray-100 text-gray-500"
-                    }`}
-                  >
-                    {guide.status === "supported" ? "Supported" : "Not supported"}
-                  </span>
                 </div>
                 <ol className="mt-4 space-y-2">
                   {guide.steps.map((step, i) => (
@@ -161,8 +156,8 @@ export default function LandingPage() {
 const embedGuides = [
   {
     tool: "Notion",
-    icon: "\u270D\uFE0F",
-    status: "supported" as const,
+    icon: "",
+    logo: "/icons/notion.svg",
     steps: [
       "In your roadmap editor, click \"Copy embed code\"",
       "In Notion, type /embed on a new line",
@@ -172,8 +167,8 @@ const embedGuides = [
   },
   {
     tool: "GitBook",
-    icon: "\uD83D\uDCD6",
-    status: "supported" as const,
+    icon: "",
+    logo: "/icons/gitbook.svg",
     steps: [
       "In your roadmap editor, click \"Copy embed code\"",
       "In GitBook, click + to add a new block",
@@ -183,8 +178,8 @@ const embedGuides = [
   },
   {
     tool: "Confluence",
-    icon: "\uD83D\uDCC4",
-    status: "supported" as const,
+    icon: "",
+    logo: "/icons/confluence.svg",
     steps: [
       "In your roadmap editor, click \"Copy embed code\"",
       "In Confluence, type /iframe or use the Iframe macro",
@@ -194,33 +189,13 @@ const embedGuides = [
   },
   {
     tool: "Any HTML site",
-    icon: "\u2328\uFE0F",
-    status: "supported" as const,
+    icon: "</\u200B>",
+    logo: null,
     steps: [
       "In your roadmap editor, click \"Copy embed code\"",
       "Paste the full iframe HTML into your page source",
       "Adjust width and height as needed",
       "The roadmap updates in real time automatically",
-    ],
-  },
-  {
-    tool: "Nuclino",
-    icon: "\uD83D\uDCDD",
-    status: "unsupported" as const,
-    steps: [
-      "Nuclino does not support custom iframe embeds",
-      "Only whitelisted integrations are available",
-      "Use the public roadmap link as a regular link instead",
-    ],
-  },
-  {
-    tool: "Google Docs",
-    icon: "\uD83D\uDCC3",
-    status: "unsupported" as const,
-    steps: [
-      "Google Docs does not support iframe embeds",
-      "Share the public roadmap link instead",
-      "Readers can click through to view the live roadmap",
     ],
   },
 ];
