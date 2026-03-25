@@ -37,7 +37,7 @@ export default function DashboardClient({
 
     if (error || !data) {
       console.error("Failed to create roadmap:", error);
-      alert(error?.message ?? "Failed to create roadmap");
+      alert("Failed to create roadmap. Please try again.");
       setCreating(false);
       return;
     }
@@ -82,7 +82,12 @@ export default function DashboardClient({
 
   async function deleteRoadmap(id: string) {
     if (!confirm("Delete this roadmap? This cannot be undone.")) return;
-    await supabase.from("roadmaps").delete().eq("id", id);
+    const { error } = await supabase.from("roadmaps").delete().eq("id", id);
+    if (error) {
+      console.error("Failed to delete roadmap:", error);
+      alert("Failed to delete roadmap. Please try again.");
+      return;
+    }
     setRoadmaps(roadmaps.filter((r) => r.id !== id));
   }
 

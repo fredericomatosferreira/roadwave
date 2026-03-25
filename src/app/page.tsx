@@ -83,6 +83,54 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* How to embed */}
+      <section id="embed-guide" className="border-t border-gray-100">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <h2 className="text-center text-3xl font-bold text-gray-900">
+            Embed in your favorite tools
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-gray-500">
+            Copy the embed code from your roadmap editor and paste it into any
+            tool that supports iframes.
+          </p>
+
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {embedGuides.map((guide) => (
+              <div
+                key={guide.tool}
+                className="rounded-xl border border-gray-200 bg-white p-6"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{guide.icon}</span>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {guide.tool}
+                  </h3>
+                  <span
+                    className={`ml-auto rounded-full px-2 py-0.5 text-xs font-medium ${
+                      guide.status === "supported"
+                        ? "bg-green-50 text-green-700"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
+                    {guide.status === "supported" ? "Supported" : "Not supported"}
+                  </span>
+                </div>
+                <ol className="mt-4 space-y-2">
+                  {guide.steps.map((step, i) => (
+                    <li key={i} className="flex gap-2 text-sm text-gray-600">
+                      <span className="shrink-0 font-semibold text-blue-600">
+                        {i + 1}.
+                      </span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="border-t border-gray-100">
         <div className="mx-auto max-w-4xl px-6 py-24 text-center">
@@ -109,6 +157,73 @@ export default function LandingPage() {
     </div>
   );
 }
+
+const embedGuides = [
+  {
+    tool: "Notion",
+    icon: "\u270D\uFE0F",
+    status: "supported" as const,
+    steps: [
+      "In your roadmap editor, click \"Copy embed code\"",
+      "In Notion, type /embed on a new line",
+      "Select \"Embed\" from the menu",
+      "Paste the embed URL and click \"Embed link\"",
+    ],
+  },
+  {
+    tool: "GitBook",
+    icon: "\uD83D\uDCD6",
+    status: "supported" as const,
+    steps: [
+      "In your roadmap editor, click \"Copy embed code\"",
+      "In GitBook, click + to add a new block",
+      "Choose \"Embed a URL\" or paste the URL directly",
+      "The roadmap will render inline",
+    ],
+  },
+  {
+    tool: "Confluence",
+    icon: "\uD83D\uDCC4",
+    status: "supported" as const,
+    steps: [
+      "In your roadmap editor, click \"Copy embed code\"",
+      "In Confluence, type /iframe or use the Iframe macro",
+      "Paste the embed URL into the macro",
+      "Save the page to see the live roadmap",
+    ],
+  },
+  {
+    tool: "Any HTML site",
+    icon: "\u2328\uFE0F",
+    status: "supported" as const,
+    steps: [
+      "In your roadmap editor, click \"Copy embed code\"",
+      "Paste the full iframe HTML into your page source",
+      "Adjust width and height as needed",
+      "The roadmap updates in real time automatically",
+    ],
+  },
+  {
+    tool: "Nuclino",
+    icon: "\uD83D\uDCDD",
+    status: "unsupported" as const,
+    steps: [
+      "Nuclino does not support custom iframe embeds",
+      "Only whitelisted integrations are available",
+      "Use the public roadmap link as a regular link instead",
+    ],
+  },
+  {
+    tool: "Google Docs",
+    icon: "\uD83D\uDCC3",
+    status: "unsupported" as const,
+    steps: [
+      "Google Docs does not support iframe embeds",
+      "Share the public roadmap link instead",
+      "Readers can click through to view the live roadmap",
+    ],
+  },
+];
 
 const features = [
   {

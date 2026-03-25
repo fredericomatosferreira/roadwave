@@ -9,13 +9,16 @@ export default function EmbedClient({
   roadmapId,
   initialColumns,
   initialCards,
+  theme = "light",
 }: {
   roadmapId: string;
   initialColumns: Column[];
   initialCards: Card[];
+  theme?: "light" | "dark";
 }) {
   const [columns, setColumns] = useState(initialColumns);
   const [cards, setCards] = useState(initialCards);
+  const dark = theme === "dark";
 
   useEffect(() => {
     const supabase = createClient();
@@ -83,14 +86,14 @@ export default function EmbedClient({
       .subscribe();
 
     return () => {
-      supabase.removeChannel(cardsChannel);
-      supabase.removeChannel(columnsChannel);
+      cardsChannel.unsubscribe();
+      columnsChannel.unsubscribe();
     };
   }, [roadmapId]);
 
   return (
-    <div className="overflow-auto bg-white p-2">
-      <KanbanBoard columns={columns} cards={cards} readonly embed />
+    <div className={`overflow-auto p-2 ${dark ? "bg-gray-900" : "bg-white"}`}>
+      <KanbanBoard columns={columns} cards={cards} readonly embed dark={dark} />
     </div>
   );
 }

@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import EmbedClient from "./embed-client";
 import type { Roadmap, Column, Card } from "@/lib/types/database";
 import type { Metadata } from "next";
-
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://roadwave.xyz";
+import { APP_URL } from "@/lib/config";
 
 export async function generateMetadata({
   params,
@@ -21,9 +20,12 @@ export async function generateMetadata({
 
 export default async function EmbedPage({
   params,
+  searchParams,
 }: {
   params: { slug: string };
+  searchParams: { theme?: string };
 }) {
+  const theme = searchParams.theme === "dark" ? "dark" : "light";
   const supabase = createClient();
 
   const { data: roadmapData } = await supabase
@@ -68,6 +70,7 @@ export default async function EmbedPage({
       roadmapId={roadmap.id}
       initialColumns={(columns as Column[]) ?? []}
       initialCards={(cards as Card[]) ?? []}
+      theme={theme}
     />
   );
 }

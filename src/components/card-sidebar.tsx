@@ -18,13 +18,25 @@ export default function CardSidebar({
   const [description, setDescription] = useState(card.description ?? "");
   const [status, setStatus] = useState(card.status);
   const [tag, setTag] = useState(card.tag ?? "");
+  const [color, setColor] = useState(card.color ?? "");
 
   useEffect(() => {
     setTitle(card.title);
     setDescription(card.description ?? "");
     setStatus(card.status);
     setTag(card.tag ?? "");
+    setColor(card.color ?? "");
   }, [card]);
+
+  const colorOptions = [
+    { value: "", label: "None", bg: "bg-white border-gray-300" },
+    { value: "blue", label: "Blue", bg: "bg-blue-400" },
+    { value: "green", label: "Green", bg: "bg-green-400" },
+    { value: "red", label: "Red", bg: "bg-red-400" },
+    { value: "yellow", label: "Yellow", bg: "bg-yellow-400" },
+    { value: "purple", label: "Purple", bg: "bg-purple-400" },
+    { value: "pink", label: "Pink", bg: "bg-pink-400" },
+  ];
 
   function handleSave() {
     onSave({
@@ -32,6 +44,7 @@ export default function CardSidebar({
       description: description || null,
       status,
       tag: tag || null,
+      color: color || null,
     });
   }
 
@@ -102,6 +115,27 @@ export default function CardSidebar({
             placeholder="e.g. Feature, Bug, Design"
             className="mt-1 block w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Color
+          </label>
+          <div className="mt-2 flex gap-2">
+            {colorOptions.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setColor(opt.value)}
+                title={opt.label}
+                className={`h-7 w-7 rounded-full border-2 ${opt.bg} ${
+                  color === opt.value
+                    ? "border-blue-600 ring-2 ring-blue-200"
+                    : "border-transparent"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

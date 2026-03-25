@@ -10,13 +10,12 @@ import {
   useSensors,
   type DragStartEvent,
   type DragEndEvent,
-  type DragOverEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import KanbanColumn from "./kanban-column";
 import KanbanCard from "./kanban-card";
 
@@ -30,6 +29,7 @@ export default function KanbanBoard({
   onDeleteColumn,
   readonly = false,
   embed = false,
+  dark = false,
 }: {
   columns: Column[];
   cards: Card[];
@@ -40,28 +40,32 @@ export default function KanbanBoard({
   onDeleteColumn?: (columnId: string) => void;
   readonly?: boolean;
   embed?: boolean;
+  dark?: boolean;
 }) {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  const sortedColumns = [...columns].sort((a, b) => a.position - b.position);
+  const sortedColumns = useMemo(
+    () => [...columns].sort((a, b) => a.position - b.position),
+    [columns]
+  );
 
-  function getColumnCards(columnId: string) {
-    return cards
-      .filter((c) => c.column_id === columnId)
-      .sort((a, b) => a.position - b.position);
-  }
+  const cardsByColumn = useMemo(() => {
+    const grouped = new Map<string, Card[]>();
+    columns.forEach((col) => {
+      grouped.set(
+        col.id,
+        cards.filter((c) => c.column_id === col.id).sort((a, b) => a.position - b.position)
+      );
+    });
+    return grouped;
+  }, [cards, columns]);
 
   function handleDragStart(event: DragStartEvent) {
     const card = cards.find((c) => c.id === event.active.id);
     if (card) setActiveCard(card);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleDragOver(_event: DragOverEvent) {
-    // Handled in dragEnd
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -86,8 +90,8 @@ export default function KanbanBoard({
       targetPosition = overCard.position;
     } else if (overColumn) {
       targetColumnId = overColumn.id;
-      const columnCards = getColumnCards(targetColumnId);
-      targetPosition = columnCards.length;
+      const colCards = cardsByColumn.get(targetColumnId) ?? [];
+      targetPosition = colCards.length;
     } else {
       return;
     }
@@ -104,7 +108,6 @@ export default function KanbanBoard({
       sensors={sensors}
       collisionDetection={closestCorners}
       onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
       <div className={embed ? "grid gap-3 p-2" : "flex gap-4 overflow-x-auto p-4 pb-8"} style={embed ? { gridTemplateColumns: `repeat(${sortedColumns.length}, minmax(0, 1fr))` } : undefined}>
@@ -116,7 +119,7 @@ export default function KanbanBoard({
             <KanbanColumn
               key={column.id}
               column={column}
-              cards={getColumnCards(column.id)}
+              cards={cardsByColumn.get(column.id) ?? []}
               onCardClick={onCardClick}
               onAddCard={onAddCard ? () => onAddCard(column.id) : undefined}
               onRenameColumn={
@@ -131,6 +134,7 @@ export default function KanbanBoard({
               }
               readonly={readonly}
               embed={embed}
+              dark={dark}
             />
           ))}
         </SortableContext>
@@ -138,7 +142,7 @@ export default function KanbanBoard({
 
       <DragOverlay>
         {activeCard ? (
-          <KanbanCard card={activeCard} readonly />
+          <KanbanCard card={activeCard} readonly dark={dark} />
         ) : null}
       </DragOverlay>
     </DndContext>

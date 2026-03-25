@@ -25,9 +25,10 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError) {
+    console.error("Auth error in middleware:", authError.message);
+  }
 
   const pathname = request.nextUrl.pathname;
 

@@ -86,23 +86,53 @@ export default function EditorClient({
 
   const moveCard = useCallback(
     async (cardId: string, newColumnId: string, newPosition: number) => {
+      let prevCards: Card[] = [];
       setCards((prev) => {
+        prevCards = prev;
         const card = prev.find((c) => c.id === cardId);
         if (!card) return prev;
 
-        const updated = prev.map((c) => {
-          if (c.id === cardId) {
-            return { ...c, column_id: newColumnId, position: newPosition };
-          }
-          return c;
+        const oldColumnId = card.column_id;
+
+        // Remove card from its current position
+        let updated = prev.filter((c) => c.id !== cardId);
+
+        // Reindex old column
+        if (oldColumnId !== newColumnId) {
+          let pos = 0;
+          updated = updated.map((c) =>
+            c.column_id === oldColumnId ? { ...c, position: pos++ } : c
+          );
+        }
+
+        // Insert at new position in target column
+        const targetCards = updated
+          .filter((c) => c.column_id === newColumnId)
+          .sort((a, b) => a.position - b.position);
+
+        const insertAt = Math.min(newPosition, targetCards.length);
+        const movedCard = { ...card, column_id: newColumnId, position: insertAt };
+
+        // Reindex target column with the card inserted
+        let pos = 0;
+        updated = updated.map((c) => {
+          if (c.column_id !== newColumnId) return c;
+          if (pos === insertAt) pos++;
+          return { ...c, position: pos++ };
         });
-        return updated;
+
+        return [...updated, movedCard];
       });
 
-      await supabase
+      const { error } = await supabase
         .from("cards")
         .update({ column_id: newColumnId, position: newPosition })
         .eq("id", cardId);
+
+      if (error) {
+        console.error("Failed to move card:", error);
+        setCards(prevCards);
+      }
     },
     [supabase]
   );
@@ -130,6 +160,13 @@ export default function EditorClient({
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
     const code = `<iframe src="${appUrl}/embed/${roadmap.slug}" width="100%" height="600" frameborder="0"></iframe>`;
     navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  function copyEmbedUrl() {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+    navigator.clipboard.writeText(`${appUrl}/embed/${roadmap.slug}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
@@ -211,6 +248,23 @@ export default function EditorClient({
             {roadmap.visibility === "private" &&
               "Only you can view this roadmap. Embeds show a placeholder."}
           </p>
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              onClick={copyEmbedCode}
+              className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Copy iframe code
+            </button>
+            <button
+              onClick={copyEmbedUrl}
+              className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Copy embed URL (Notion)
+            </button>
+            <span className="text-xs text-gray-400">
+              Tip: Add <code className="bg-gray-100 px-1 rounded">?theme=dark</code> for dark mode
+            </span>
+          </div>
         </div>
       )}
 

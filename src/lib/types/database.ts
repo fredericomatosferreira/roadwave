@@ -103,6 +103,7 @@ export interface Database {
           description: string | null;
           status: "planned" | "in_progress" | "done";
           tag: string | null;
+          color: string | null;
           position: number;
         };
         Insert: {
@@ -113,6 +114,7 @@ export interface Database {
           description?: string | null;
           status?: "planned" | "in_progress" | "done";
           tag?: string | null;
+          color?: string | null;
           position: number;
         };
         Update: {
@@ -123,6 +125,7 @@ export interface Database {
           description?: string | null;
           status?: "planned" | "in_progress" | "done";
           tag?: string | null;
+          color?: string | null;
           position?: number;
         };
         Relationships: [

@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@14 roadwave-app --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm)",
+      "Bash(shopt -s dotglob)",
+      "Bash(mv /c/Users/35191/Desktop/RoadWave/roadwave-app/* /c/Users/35191/Desktop/RoadWave/)",
+      "Bash(rmdir /c/Users/35191/Desktop/RoadWave/roadwave-app)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(mkdir -p \"/c/Users/35191/Desktop/RoadWave/src/app/editor/[id]\")",
+      "Bash(mv \"/c/Users/35191/Desktop/RoadWave/src/app/roadmap/[id]/edit/page.tsx\" \"/c/Users/35191/Desktop/RoadWave/src/app/editor/[id]/page.tsx\")",
+      "Bash(mv \"/c/Users/35191/Desktop/RoadWave/src/app/roadmap/[id]/edit/editor-client.tsx\" \"/c/Users/35191/Desktop/RoadWave/src/app/editor/[id]/editor-client.tsx\")",
+      "Bash(rm -rf \"/c/Users/35191/Desktop/RoadWave/src/app/roadmap/[id]\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(gh auth:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo:*)",
+      "Bash(npx vercel:*)",
+      "Bash(nslookup roadwave.xyz)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/logo.svg)",
+      "Bash(git rm:*)",
+      "Bash(git push:*)",
+      "Bash(curl -sI \"https://roadwave.xyz/embed/roadmap-mmyr32jv\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://roadwave.xyz/embed/roadmap-mmyr32jv\")",
+      "Bash(npx next:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\35191\\Desktop\\RoadWave\\src",
+      "C:\\Users\\35191\\Desktop\\RoadWave\\src\\app\\embed\\[slug]"
+    ]
+  }
+}
