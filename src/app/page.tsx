@@ -65,7 +65,7 @@ export default function LandingPage() {
             stakeholders aligned without maintaining yet another tool.
           </p>
 
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-8 sm:grid-cols-2">
             {features.map((f) => (
               <div key={f.title} className="rounded-xl bg-white p-6 shadow-sm">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-lg text-blue-600">
@@ -220,15 +220,9 @@ const features = [
       "Every change you make is instantly reflected in all embedded views. No page refresh, no stale data.",
   },
   {
-    title: "Share controls",
+    title: "Share controls & status badges",
     icon: "\uD83D\uDD12",
     description:
-      "Set roadmaps to Public, Unlisted, or Private. Control exactly who can see what.",
-  },
-  {
-    title: "Status badges",
-    icon: "\u25CF",
-    description:
-      "Tag cards as Planned, In Progress, or Done with color-coded badges so stakeholders can see progress at a glance.",
+      "Set roadmaps to Public, Unlisted, or Private. Tag cards as Planned, In Progress, or Done with color-coded badges so stakeholders can see progress at a glance.",
   },
 ];
