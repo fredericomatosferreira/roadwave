@@ -18,7 +18,6 @@ export default function KanbanColumn({
   readonly = false,
   embed = false,
   dark = false,
-  transparent = false,
 }: {
   column: Column;
   cards: Card[];
@@ -29,12 +28,11 @@ export default function KanbanColumn({
   readonly?: boolean;
   embed?: boolean;
   dark?: boolean;
-  transparent?: boolean;
 }) {
   const { setNodeRef } = useDroppable({ id: column.id });
 
   return (
-    <div className={`flex flex-col rounded-xl p-3 ${embed ? "min-w-0" : "w-72 shrink-0"} ${transparent ? "bg-white/10 backdrop-blur-sm" : dark ? "bg-gray-800" : "bg-gray-100/80"}`}>
+    <div className={`flex flex-col rounded-xl p-3 ${embed ? "min-w-0" : "w-72 shrink-0"} ${dark ? "bg-gray-800" : "bg-gray-100/80"}`}>
       {/* Column header */}
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -46,9 +44,9 @@ export default function KanbanColumn({
               className="w-full bg-transparent text-sm font-bold text-gray-700 outline-none focus:ring-1 focus:ring-blue-400 rounded px-1"
             />
           ) : (
-            <h3 className={`text-sm font-bold ${transparent || dark ? "text-gray-200" : "text-gray-700"}`}>{column.title}</h3>
+            <h3 className={`text-sm font-bold ${dark ? "text-gray-200" : "text-gray-700"}`}>{column.title}</h3>
           )}
-          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${transparent ? "bg-white/20 text-gray-300" : dark ? "bg-gray-700 text-gray-400" : "bg-gray-200 text-gray-500"}`}>
+          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${dark ? "bg-gray-700 text-gray-400" : "bg-gray-200 text-gray-500"}`}>
             {cards.length}
           </span>
         </div>
@@ -76,13 +74,12 @@ export default function KanbanColumn({
               onClick={onCardClick ? () => onCardClick(card) : undefined}
               readonly={readonly}
               dark={dark}
-              transparent={transparent}
             />
           ))}
         </SortableContext>
 
         {cards.length === 0 && (
-          <p className={`py-4 text-center text-xs ${transparent || dark ? "text-gray-500" : "text-gray-400"}`}>
+          <p className={`py-4 text-center text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
             No cards yet
           </p>
         )}

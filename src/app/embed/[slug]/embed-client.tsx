@@ -14,7 +14,7 @@ export default function EmbedClient({
   roadmapId: string;
   initialColumns: Column[];
   initialCards: Card[];
-  theme?: "light" | "dark" | "auto";
+  theme?: "light" | "dark";
 }) {
   const [columns, setColumns] = useState(initialColumns);
   const [cards, setCards] = useState(initialCards);
@@ -91,11 +91,9 @@ export default function EmbedClient({
     };
   }, [roadmapId]);
 
-  const auto = theme === "auto";
-
   return (
-    <div className={`overflow-auto p-2 ${dark ? "bg-gray-900" : auto ? "bg-transparent" : "bg-white"}`}>
-      <KanbanBoard columns={columns} cards={cards} readonly embed dark={dark} transparent={auto} />
+    <div className={`overflow-auto p-2 ${dark ? "bg-gray-900" : "bg-white"}`}>
+      <KanbanBoard columns={columns} cards={cards} readonly embed dark={dark} />
     </div>
   );
 }

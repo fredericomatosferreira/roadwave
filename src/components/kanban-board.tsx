@@ -30,7 +30,6 @@ export default function KanbanBoard({
   readonly = false,
   embed = false,
   dark = false,
-  transparent = false,
 }: {
   columns: Column[];
   cards: Card[];
@@ -42,7 +41,6 @@ export default function KanbanBoard({
   readonly?: boolean;
   embed?: boolean;
   dark?: boolean;
-  transparent?: boolean;
 }) {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const sensors = useSensors(
@@ -137,7 +135,6 @@ export default function KanbanBoard({
               readonly={readonly}
               embed={embed}
               dark={dark}
-              transparent={transparent}
             />
           ))}
         </SortableContext>
@@ -145,7 +142,7 @@ export default function KanbanBoard({
 
       <DragOverlay>
         {activeCard ? (
-          <KanbanCard card={activeCard} readonly dark={dark} transparent={transparent} />
+          <KanbanCard card={activeCard} readonly dark={dark} />
         ) : null}
       </DragOverlay>
     </DndContext>
