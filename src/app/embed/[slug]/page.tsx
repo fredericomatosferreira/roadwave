@@ -25,7 +25,7 @@ export default async function EmbedPage({
   params: { slug: string };
   searchParams: { theme?: string };
 }) {
-  const theme = searchParams.theme === "dark" ? "dark" : "light";
+  const theme = searchParams.theme === "dark" ? "dark" : searchParams.theme === "light" ? "light" : "auto";
   const supabase = createClient();
 
   const { data: roadmapData } = await supabase
