@@ -39,6 +39,15 @@ export default function EditorClient({
       .eq("id", roadmap.id);
   }
 
+  // ---- Embed theme ----
+  async function updateEmbedTheme(embed_theme: Roadmap["embed_theme"]) {
+    setRoadmap({ ...roadmap, embed_theme });
+    await supabase
+      .from("roadmaps")
+      .update({ embed_theme })
+      .eq("id", roadmap.id);
+  }
+
   // ---- Columns ----
   async function addColumn() {
     const position = columns.length;
@@ -87,6 +96,8 @@ export default function EditorClient({
   const moveCard = useCallback(
     async (cardId: string, newColumnId: string, newPosition: number) => {
       let prevCards: Card[] = [];
+      let newCards: Card[] = [];
+
       setCards((prev) => {
         prevCards = prev;
         const card = prev.find((c) => c.id === cardId);
@@ -95,17 +106,9 @@ export default function EditorClient({
         const oldColumnId = card.column_id;
 
         // Remove card from its current position
-        let updated = prev.filter((c) => c.id !== cardId);
+        const updated = prev.filter((c) => c.id !== cardId);
 
-        // Reindex old column
-        if (oldColumnId !== newColumnId) {
-          let pos = 0;
-          updated = updated.map((c) =>
-            c.column_id === oldColumnId ? { ...c, position: pos++ } : c
-          );
-        }
-
-        // Insert at new position in target column
+        // Build new target column order
         const targetCards = updated
           .filter((c) => c.column_id === newColumnId)
           .sort((a, b) => a.position - b.position);
@@ -113,24 +116,50 @@ export default function EditorClient({
         const insertAt = Math.min(newPosition, targetCards.length);
         const movedCard = { ...card, column_id: newColumnId, position: insertAt };
 
-        // Reindex target column with the card inserted
-        let pos = 0;
-        updated = updated.map((c) => {
-          if (c.column_id !== newColumnId) return c;
-          if (pos === insertAt) pos++;
-          return { ...c, position: pos++ };
-        });
+        // Insert moved card at the right spot and reindex target column
+        targetCards.splice(insertAt, 0, movedCard);
+        const reindexedTarget = targetCards.map((c, i) => ({ ...c, position: i }));
 
-        return [...updated, movedCard];
+        // Reindex old column if cross-column move
+        let reindexedOld: Card[] = [];
+        if (oldColumnId !== newColumnId) {
+          reindexedOld = updated
+            .filter((c) => c.column_id === oldColumnId)
+            .sort((a, b) => a.position - b.position)
+            .map((c, i) => ({ ...c, position: i }));
+        }
+
+        // Merge everything back
+        const affectedIds = new Set([
+          ...reindexedTarget.map((c) => c.id),
+          ...reindexedOld.map((c) => c.id),
+        ]);
+        const result = updated
+          .filter((c) => !affectedIds.has(c.id))
+          .concat(reindexedTarget, reindexedOld);
+
+        newCards = result;
+        return result;
       });
 
-      const { error } = await supabase
-        .from("cards")
-        .update({ column_id: newColumnId, position: newPosition })
-        .eq("id", cardId);
+      // Persist all position changes for affected columns
+      const affectedCards = newCards.filter(
+        (c) => {
+          const old = prevCards.find((p) => p.id === c.id);
+          return old && (old.position !== c.position || old.column_id !== c.column_id);
+        }
+      );
 
-      if (error) {
-        console.error("Failed to move card:", error);
+      const updates = affectedCards.map((c) =>
+        supabase
+          .from("cards")
+          .update({ column_id: c.column_id, position: c.position })
+          .eq("id", c.id)
+      );
+
+      const results = await Promise.all(updates);
+      if (results.some((r) => r.error)) {
+        console.error("Failed to move card");
         setCards(prevCards);
       }
     },
@@ -248,6 +277,24 @@ export default function EditorClient({
             {roadmap.visibility === "private" &&
               "Only you can view this roadmap. Embeds show a placeholder."}
           </p>
+          <div className="mt-4">
+            <h4 className="text-xs font-semibold text-gray-700 mb-2">Embed Theme</h4>
+            <div className="flex gap-2">
+              {(["light", "dark"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => updateEmbedTheme(t)}
+                  className={`rounded-lg px-4 py-2 text-sm font-medium capitalize ${
+                    roadmap.embed_theme === t
+                      ? "bg-blue-600 text-white"
+                      : "border border-gray-200 text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  {t === "light" ? "Light" : "Dark"}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="mt-4 flex items-center gap-3">
             <button
               onClick={copyEmbedCode}
@@ -261,9 +308,6 @@ export default function EditorClient({
             >
               Copy embed URL (Notion)
             </button>
-            <span className="text-xs text-gray-400">
-              Tip: Add <code className="bg-gray-100 px-1 rounded">?theme=dark</code> for dark mode
-            </span>
           </div>
         </div>
       )}

@@ -20,12 +20,9 @@ export async function generateMetadata({
 
 export default async function EmbedPage({
   params,
-  searchParams,
 }: {
   params: { slug: string };
-  searchParams: { theme?: string };
 }) {
-  const theme = searchParams.theme === "dark" ? "dark" : "light";
   const supabase = createClient();
 
   const { data: roadmapData } = await supabase
@@ -70,7 +67,7 @@ export default async function EmbedPage({
       roadmapId={roadmap.id}
       initialColumns={(columns as Column[]) ?? []}
       initialCards={(cards as Card[]) ?? []}
-      theme={theme}
+      theme={roadmap.embed_theme ?? "light"}
     />
   );
 }

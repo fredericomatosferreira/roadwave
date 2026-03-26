@@ -34,6 +34,7 @@ export interface Database {
           title: string;
           slug: string;
           visibility: "public" | "private" | "unlisted";
+          embed_theme: "light" | "dark";
           created_at: string;
           updated_at: string;
         };
@@ -43,6 +44,7 @@ export interface Database {
           title: string;
           slug: string;
           visibility?: "public" | "private" | "unlisted";
+          embed_theme?: "light" | "dark";
           created_at?: string;
           updated_at?: string;
         };
@@ -52,6 +54,7 @@ export interface Database {
           title?: string;
           slug?: string;
           visibility?: "public" | "private" | "unlisted";
+          embed_theme?: "light" | "dark";
           created_at?: string;
           updated_at?: string;
         };
