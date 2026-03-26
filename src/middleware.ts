@@ -6,5 +6,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/editor/:path*", "/embed/:path*"],
+  matcher: ["/", "/login", "/dashboard/:path*", "/editor/:path*", "/embed/:path*"],
 };
