@@ -32,18 +32,25 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
+  // Helper: copy refreshed session cookies onto a redirect response
+  function redirectWithCookies(pathname: string) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname;
+    const redirect = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirect.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirect;
+  }
+
   // Protected routes — redirect to login if not authenticated
   if (!user && (pathname.startsWith("/dashboard") || pathname.startsWith("/editor/"))) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+    return redirectWithCookies("/login");
   }
 
   // Redirect logged-in users from landing/login to dashboard
   if (user && (pathname === "/" || pathname === "/login")) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+    return redirectWithCookies("/dashboard");
   }
 
   // Allow embedding in iframes for /embed routes
